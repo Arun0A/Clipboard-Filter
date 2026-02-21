@@ -41,6 +41,12 @@ void loadFilters() {
     wchar_t line[MAX_FILTER_LEN];
 
     while (fgetws(line, MAX_FILTER_LEN, f) && filterCount < MAX_FILTERS) {
+
+        // 🔹 Strip BOM only for very first line
+        if (filterCount == 0 && line[0] == 0xFEFF) {
+            memmove(line, line + 1, wcslen(line) * sizeof(wchar_t));
+        }
+
         size_t len = wcslen(line);
         while (len > 0 && (line[len - 1] == L'\n' || line[len - 1] == L'\r')) {
             line[--len] = L'\0';
